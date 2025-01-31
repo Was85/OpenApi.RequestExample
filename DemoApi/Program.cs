@@ -9,7 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi(options =>
 {
-    options.AddDocumentTransformer<GeneratedOpenApiTransformer>();
+    options.AddDocumentTransformer<GeneratedOpenApiDocumentTransformer>();
 });
 
 var app = builder.Build();
