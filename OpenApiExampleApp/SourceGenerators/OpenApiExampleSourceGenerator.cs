@@ -51,10 +51,14 @@ namespace OpenApiExampleApp.SourceGenerators
                 return null;
             }
 
+            // Extract positional arguments (only exampleType is mandatory)
             var exampleType = attributeData.ConstructorArguments[0].Value?.ToString();
-            var exampleProviderProperty = attributeData.ConstructorArguments[1].Value?.ToString();
-            var exampleName = attributeData.ConstructorArguments.Length > 2 ? attributeData.ConstructorArguments[2].Value?.ToString() ?? "Default" : "Default";
 
+            // Handle named arguments with fallback to constructor arguments or defaults
+            var exampleProviderProperty = GetArgumentValue(attributeData, "exampleProviderProperty", 1, "Example");
+            var exampleName = GetArgumentValue(attributeData, "name", 2, "Default");
+            var overwriteExisting = GetArgumentValue(attributeData, "overwriteExisting", 3, false);
+            
             var endPointInfo = new EndpointInfo
             {
                 Path = ExtractRoute(methodSymbol),
@@ -62,10 +66,42 @@ namespace OpenApiExampleApp.SourceGenerators
                 ExampleName = exampleName,
                 ExampleType = exampleType,
                 ExampleProviderProperty = exampleProviderProperty,
+                OverwriteExisting = overwriteExisting,
                 Symbol = methodSymbol
             };
 
             return endPointInfo;
+        }
+
+        /// <summary>
+        /// Helper method to get argument values with fallback logic
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="attributeData"></param>
+        /// <param name="namedArgument"></param>
+        /// <param name="position"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        private static T GetArgumentValue<T>(
+            AttributeData attributeData,
+            string namedArgument, 
+            int position,
+            T defaultValue)
+        {
+            // Check named arguments first
+            if (attributeData.NamedArguments.Any(kv => kv.Key == namedArgument))
+            {
+                return (T)attributeData.NamedArguments.First(kv => kv.Key == namedArgument).Value.Value;
+            }
+
+            // Fallback to positional arguments if named argument isn't provided
+            if (attributeData.ConstructorArguments.Length > position)
+            {
+                return (T)attributeData.ConstructorArguments[position].Value;
+            }
+
+            // Fallback to the default value if neither is provided
+            return defaultValue;
         }
 
         private static void Execute(Compilation compilation, ImmutableArray<EndpointInfo> endpoints, SourceProductionContext context)
@@ -113,7 +149,22 @@ namespace OpenApiExampleApp.SourceGenerators
                 sb.AppendLine("                {");
                 sb.AppendLine("                    operation.RequestBody.Content[\"application/json\"].Examples = new Dictionary<string, OpenApiExample>();");
                 sb.AppendLine("                }");
-                sb.AppendLine($"                operation.RequestBody.Content[\"application/json\"].Examples[\"{endpoint.ExampleName}\"] = {endpoint.ExampleType}.{endpoint.ExampleProviderProperty};");
+                // Add Overwrite Logic
+                if (endpoint.OverwriteExisting)
+                {
+                    // Overwrite existing example unconditionally
+                    sb.AppendLine($"                operation.RequestBody.Content[\"application/json\"].Examples[\"{endpoint.ExampleName}\"] = {endpoint.ExampleType}.Example;");
+                }
+                else
+                {
+                    // Only add if it doesn't already exist
+                    sb.AppendLine($"                if (!operation.RequestBody.Content[\"application/json\"].Examples.ContainsKey(\"{endpoint.ExampleName}\"))");
+                    sb.AppendLine("                {");
+                    sb.AppendLine($"                    operation.RequestBody.Content[\"application/json\"].Examples[\"{endpoint.ExampleName}\"] = {endpoint.ExampleType}.Example;");
+                    sb.AppendLine("                }");
+                }
+
+                //sb.AppendLine($"                operation.RequestBody.Content[\"application/json\"].Examples[\"{endpoint.ExampleName}\"] = {endpoint.ExampleType}.{endpoint.ExampleProviderProperty};");
                 sb.AppendLine("            }");
                 sb.AppendLine("        }");
             }

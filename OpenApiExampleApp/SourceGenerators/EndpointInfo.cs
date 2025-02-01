@@ -31,4 +31,9 @@ public class EndpointInfo
     /// The method symbol representing the endpoint. Used for diagnostics.
     /// </summary>
     public ISymbol Symbol { get; set; }
+
+    /// <summary>
+    /// The Overwrite flag provides flexibility to control when examples should be replaced.
+    /// </summary>
+    public bool OverwriteExisting { get; set; }
 }
