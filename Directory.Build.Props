@@ -1,0 +1,42 @@
+<Project>
+	<PropertyGroup>
+
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageIcon>package-icon.png</PackageIcon>
+		<PackageId>OpenApi.RequestExample</PackageId>
+		<ApplicationIcon></ApplicationIcon>
+		<Description>
+			This package provides a source generator for .NET Standard 2.0 applications,
+			helping developers to automatically generate request examples for their APIs.
+			It simplifies the process of creating and maintaining example requests,
+			ensuring consistency and reducing manual effort. Note: Minimal APIs are not supported.
+		</Description>
+		<Authors>Waseem Al</Authors>
+		<Company></Company>
+		<Product></Product>
+		<Copyright>© Copyright $([System.DateTime]::Now.Year) Waseem</Copyright>
+		<RepositoryType>git</RepositoryType>
+
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeSymbols>true</IncludeSymbols>
+
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath=""/>
+		<None Include="LICENSE.txt" Pack="true" PackagePath=""/>
+	</ItemGroup>
+	<ItemGroup>
+	</ItemGroup>
+
+
+</Project>

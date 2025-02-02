@@ -13,6 +13,23 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{145F141C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "exampl", "exampl", "{221B5EB1-6937-4CFF-B6B8-F59A4A380823}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{FA0558E3-E1FF-4713-80EF-018A84334D18}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.Props = Directory.Build.Props
+		LICENSE.txt = LICENSE.txt
+		package-icon.png = package-icon.png
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{E163F977-45E8-4CD1-B497-CB5BEAF7A480}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D4B80A19-2035-46DD-8FD1-E6FDC02B5E3D}"
+	ProjectSection(SolutionItems) = preProject
+		nuget-ci-cd.yml = nuget-ci-cd.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -34,5 +51,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{B929C178-222D-4A89-8414-8ACDF1FB4430} = {CB929E4B-CFC5-4DEF-B2DF-ECEA46339A08}
 		{3E7808B4-E147-41DA-B813-7A485C479CDB} = {221B5EB1-6937-4CFF-B6B8-F59A4A380823}
+		{E163F977-45E8-4CD1-B497-CB5BEAF7A480} = {FA0558E3-E1FF-4713-80EF-018A84334D18}
+		{D4B80A19-2035-46DD-8FD1-E6FDC02B5E3D} = {E163F977-45E8-4CD1-B497-CB5BEAF7A480}
 	EndGlobalSection
 EndGlobal
