@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenApiExampleApp", "OpenApiExampleApp\OpenApiExampleApp.csproj", "{B929C178-222D-4A89-8414-8ACDF1FB4430}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{CB929E4B-CFC5-4DEF-B2DF-ECEA46339A08}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApi", "DemoApi\DemoApi.csproj", "{3E7808B4-E147-41DA-B813-7A485C479CDB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{145F141C-5A21-498E-BFA9-55522D610A93}"
 EndProject
@@ -19,16 +15,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitignore = .gitignore
 		Directory.Build.Props = Directory.Build.Props
 		LICENSE.txt = LICENSE.txt
+		.github\workflows\nuget-ci-cd.yml = .github\workflows\nuget-ci-cd.yml
 		package-icon.png = package-icon.png
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{E163F977-45E8-4CD1-B497-CB5BEAF7A480}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenApiExampleApp", "src\OpenApiExampleApp\OpenApiExampleApp.csproj", "{CD732490-6E82-4FF7-BAA5-4E5B74CB7248}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{D4B80A19-2035-46DD-8FD1-E6FDC02B5E3D}"
-	ProjectSection(SolutionItems) = preProject
-		nuget-ci-cd.yml = nuget-ci-cd.yml
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApi", "exampl\DemoApi\DemoApi.csproj", "{9533ED82-D44A-4EE0-A30F-D70DEB55D1FB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,22 +30,20 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B929C178-222D-4A89-8414-8ACDF1FB4430}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B929C178-222D-4A89-8414-8ACDF1FB4430}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B929C178-222D-4A89-8414-8ACDF1FB4430}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B929C178-222D-4A89-8414-8ACDF1FB4430}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3E7808B4-E147-41DA-B813-7A485C479CDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3E7808B4-E147-41DA-B813-7A485C479CDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3E7808B4-E147-41DA-B813-7A485C479CDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3E7808B4-E147-41DA-B813-7A485C479CDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD732490-6E82-4FF7-BAA5-4E5B74CB7248}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD732490-6E82-4FF7-BAA5-4E5B74CB7248}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD732490-6E82-4FF7-BAA5-4E5B74CB7248}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD732490-6E82-4FF7-BAA5-4E5B74CB7248}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9533ED82-D44A-4EE0-A30F-D70DEB55D1FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9533ED82-D44A-4EE0-A30F-D70DEB55D1FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9533ED82-D44A-4EE0-A30F-D70DEB55D1FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9533ED82-D44A-4EE0-A30F-D70DEB55D1FB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{B929C178-222D-4A89-8414-8ACDF1FB4430} = {CB929E4B-CFC5-4DEF-B2DF-ECEA46339A08}
-		{3E7808B4-E147-41DA-B813-7A485C479CDB} = {221B5EB1-6937-4CFF-B6B8-F59A4A380823}
-		{E163F977-45E8-4CD1-B497-CB5BEAF7A480} = {FA0558E3-E1FF-4713-80EF-018A84334D18}
-		{D4B80A19-2035-46DD-8FD1-E6FDC02B5E3D} = {E163F977-45E8-4CD1-B497-CB5BEAF7A480}
+		{CD732490-6E82-4FF7-BAA5-4E5B74CB7248} = {CB929E4B-CFC5-4DEF-B2DF-ECEA46339A08}
+		{9533ED82-D44A-4EE0-A30F-D70DEB55D1FB} = {221B5EB1-6937-4CFF-B6B8-F59A4A380823}
 	EndGlobalSection
 EndGlobal
