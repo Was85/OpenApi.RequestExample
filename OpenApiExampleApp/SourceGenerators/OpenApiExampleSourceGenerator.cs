@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
@@ -12,6 +13,7 @@ namespace OpenApiExampleApp.SourceGenerators
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
+            Debugger.Launch();
             // Register a syntax receiver that finds attribute usages
             var syntaxProvider = context.SyntaxProvider
                 .CreateSyntaxProvider(
@@ -127,7 +129,13 @@ namespace OpenApiExampleApp.SourceGenerators
 
             foreach (var endpoint in endpoints)
             {
-                if (!HasStaticProperty(endpoint.ExampleType, endpoint.ExampleProviderProperty, compilation))
+                if (IsRequestExampleApplicable(endpoint.OperationType) == false)
+                {
+                    // Skip HEAD and OPTIONS methods
+                    continue;
+                }
+                
+                if (HasStaticProperty(endpoint.ExampleType, endpoint.ExampleProviderProperty, compilation) == false)
                 {
                     ReportDiagnostic(
                         context,
@@ -136,6 +144,7 @@ namespace OpenApiExampleApp.SourceGenerators
                         "Example Not Found",
                         "OpenApiExample"
                     );
+
                     continue;
                 }
 
@@ -210,12 +219,43 @@ namespace OpenApiExampleApp.SourceGenerators
         private static string GetOperationType(IMethodSymbol methodSymbol)
         {
             var attributes = methodSymbol.GetAttributes();
-            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpGetAttribute")) return "Get";
-            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpPostAttribute")) return "Post";
-            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpPutAttribute")) return "Put";
-            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpDeleteAttribute")) return "Delete";
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpGetAttribute"))
+            {
+                return "Get";
+            }
 
-            return "Post";
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpPostAttribute"))
+            {
+                return "Post";
+            }
+
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpPutAttribute"))
+            {
+                return "Put";
+            }
+
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpDeleteAttribute"))
+            {
+                return "Delete";
+            }
+
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpPatchAttribute"))
+            {
+                return "Patch";
+            }
+
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpHeadAttribute"))
+            {
+                return "Head";
+            }
+
+            if (attributes.Any(attr => attr.AttributeClass?.Name == "HttpOptionsAttribute"))
+            {
+                return "Options";
+            }
+            string attrCommaSeparated = string.Join(",", attributes.Select(attr => attr.AttributeClass?.Name));
+
+            throw new System.Exception($"Unsupported HTTP method. {attrCommaSeparated}");
         }
 
         private static string ExtractRoute(IMethodSymbol methodSymbol)
@@ -238,7 +278,10 @@ namespace OpenApiExampleApp.SourceGenerators
                 .FirstOrDefault(attr => attr.AttributeClass?.Name == "HttpGetAttribute" ||
                                         attr.AttributeClass?.Name == "HttpPostAttribute" ||
                                         attr.AttributeClass?.Name == "HttpPutAttribute" ||
-                                        attr.AttributeClass?.Name == "HttpDeleteAttribute");
+                                        attr.AttributeClass?.Name == "HttpDeleteAttribute" ||
+                                        attr.AttributeClass?.Name == "HttpPatchAttribute" ||  
+                                        attr.AttributeClass?.Name == "HttpHeadAttribute" ||   
+                                        attr.AttributeClass?.Name == "HttpOptionsAttribute"); 
 
             var methodRoute = methodRouteAttribute?.ConstructorArguments.FirstOrDefault().Value?.ToString();
 
@@ -260,6 +303,12 @@ namespace OpenApiExampleApp.SourceGenerators
 
             // Fallback: Infer from controller name and method name
             return $"/{RemoveControllerSuffix(controllerSymbol.Name)}/{methodSymbol.Name}";
+        }
+
+        private static bool IsRequestExampleApplicable(string operationType)
+        {
+            // Exclude HEAD and OPTIONS as they don't typically have request bodies
+            return operationType != "Head" && operationType != "Options";
         }
     }
 }
