@@ -13,7 +13,6 @@ namespace OpenApiExampleApp.SourceGenerators
     {
         public void Initialize(IncrementalGeneratorInitializationContext context)
         {
-            Debugger.Launch();
             // Register a syntax receiver that finds attribute usages
             var syntaxProvider = context.SyntaxProvider
                 .CreateSyntaxProvider(

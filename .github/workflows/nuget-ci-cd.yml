@@ -1,15 +1,115 @@
-name: CI/CD Pipeline
+name: NuGet Package Pipeline
 
 on:
+  workflow_dispatch:  #  manual trigger
   push:
     branches:
-      - 'release/**'
+      - master
       - main
-      - feature/**
+      - release/**
+  # pull_request:
+  #   branches:
+  #     - main
+  #     - release/**
 
 env:
   MAJOR: 1
   MINOR: 0
   PATCH: 0
   LABEL: preview
+  SOLUTION_PATH: 'OpenApiExampleApp.sln'
 
+jobs:
+  calculate_version:
+    name: Determine Package Version
+    runs-on: ubuntu-latest
+    outputs:
+      version_prefix: ${{ steps.version.outputs.version_prefix }}
+      version_suffix: ${{ steps.version.outputs.version_suffix }}
+    steps:
+      - name: Calculate Version
+        id: version
+        run: |
+          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
+            FULL_VERSION="${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-${{ env.LABEL }}.$(date +%Y%m%d%H%M%S)"
+          elif [[ "$GITHUB_REF" =~ refs/heads/release/* ]]; then
+            FULL_VERSION="${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-${{ env.LABEL }}"
+          else
+            FULL_VERSION="${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-local.$(date +%Y%m%d%H%M%S)"
+          fi
+
+          echo "version_prefix=$(echo $FULL_VERSION | cut -d'-' -f1)" >> $GITHUB_OUTPUT
+          echo "version_suffix=$(echo $FULL_VERSION | cut -d'-' -f2)" >> $GITHUB_OUTPUT
+          echo "Generated version: $FULL_VERSION"
+
+  build:
+    name: Build and Package
+    needs: calculate_version
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Build Solution
+        run: |
+          dotnet build ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            -p:VersionPrefix=${{ needs.calculate_version.outputs.version_prefix }} \
+            -p:VersionSuffix=${{ needs.calculate_version.outputs.version_suffix }}
+
+      - name: Create NuGet Package
+        run: |
+          dotnet pack ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            --output nupkgs \
+            --include-symbols \
+            --include-source
+
+      - name: Upload Test Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nuget-package
+          path: nupkgs/*.nupkg
+          retention-days: 3
+
+  validate:
+    name: Validate Package
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: nuget-package
+
+      - name: Inspect Package
+        run: |
+          echo "Package contents:"
+          unzip -l *.nupkg
+          echo "Package metadata:"
+          nuget spec -force -n | out-null; Get-Content *.nuspec -Encoding UTF8
+
+  # Uncomment below section when ready to publish
+  # publish:
+  #   name: Publish to NuGet
+  #   needs: [calculate_version, build]
+  #   runs-on: ubuntu-latest
+  #   environment: 
+  #     name: nuget-publish
+  #     url: https://www.nuget.org/packages/
+  #   if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
+  #   steps:
+  #     - name: Download Artifact
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: nuget-package
+  # 
+  #     - name: Push to NuGet.org
+  #       run: |
+  #         dotnet nuget push *.nupkg \
+  #           --api-key ${{ secrets.NUGET_API_KEY }} \
+  #           --source https://api.nuget.org/v3/index.json

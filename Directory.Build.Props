@@ -4,7 +4,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageIcon>package-icon.png</PackageIcon>
-		<PackageId>OpenApi.RequestExample</PackageId>
+		<PackageId>AspnetCore.OpenApi.RequestExample</PackageId>
 		<ApplicationIcon></ApplicationIcon>
 		<Description>
 			This package provides a source generator for .NET Standard 2.0 applications,
@@ -27,16 +27,6 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<IncludeSymbols>true</IncludeSymbols>
 
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<None Include="README.md" Pack="true" PackagePath=""/>
-		<None Include="LICENSE.txt" Pack="true" PackagePath=""/>
-	</ItemGroup>
-	<ItemGroup>
-	</ItemGroup>
-
 
 </Project>

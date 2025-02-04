@@ -15,9 +15,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="7.2.0" />
   </ItemGroup>
 
-
   <ItemGroup>
-    <ProjectReference Include="..\OpenApiExampleApp\OpenApiExampleApp.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true" />
+    <ProjectReference Include="..\..\src\OpenApiExampleApp\OpenApiExampleApp.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="true"/>
   </ItemGroup>
-
+	
 </Project>

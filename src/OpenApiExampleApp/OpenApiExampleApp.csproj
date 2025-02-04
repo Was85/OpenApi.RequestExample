@@ -8,10 +8,7 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.12.0" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.OpenApi" Version="1.6.22" />
 	</ItemGroup>
-
-
-	<Target Name="ShutdownBuildServer" BeforeTargets="BeforeBuild">
-		<Exec Command="dotnet build-server shutdown" />
-	</Target>
-
+	<ItemGroup>
+		<None Include="..\..\package-icon.png" Pack="true" PackagePath="" />
+	</ItemGroup>
 </Project>
