@@ -1,16 +1,15 @@
 name: NuGet Package Pipeline
 
 on:
-  workflow_dispatch:  #  manual trigger
+  workflow_dispatch:
   push:
     branches:
-      - master
       - main
       - release/**
-  # pull_request:
-  #   branches:
-  #     - main
-  #     - release/**
+  pull_request:
+    branches:
+      - main
+      - release/**
 
 env:
   MAJOR: 1
@@ -70,7 +69,7 @@ jobs:
             --include-source
 
       - name: Upload Test Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: nuget-package
           path: nupkgs/*.nupkg
@@ -82,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: nuget-package
 
@@ -104,7 +103,7 @@ jobs:
   #   if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
   #   steps:
   #     - name: Download Artifact
-  #       uses: actions/download-artifact@v3
+  #       uses: actions/download-artifact@v4
   #       with:
   #         name: nuget-package
   # 
