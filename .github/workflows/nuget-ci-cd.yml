@@ -86,12 +86,7 @@ jobs:
         with:
           name: nuget-package
 
-      - name: Inspect Package
-        run: |
-          echo "Package contents:"
-          unzip -l *.nupkg
-          echo "Package metadata:"
-          nuget spec -force -n | out-null; Get-Content *.nuspec -Encoding UTF8
+
 
 
   # Uncomment below section when ready to publish
