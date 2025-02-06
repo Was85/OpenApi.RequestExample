@@ -64,9 +64,12 @@ jobs:
         run: |
           dotnet pack ${{ env.SOLUTION_PATH }} \
             --configuration Release \
+            -p:VersionPrefix=${{ needs.calculate_version.outputs.version_prefix }} \
+            -p:VersionSuffix=${{ needs.calculate_version.outputs.version_suffix }} \
             --output nupkgs \
             --include-symbols \
             --include-source
+
 
       - name: Upload Test Artifact
         uses: actions/upload-artifact@v4
