@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
 
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -19,10 +21,8 @@
 		<Product></Product>
 		<Copyright>© Copyright $([System.DateTime]::Now.Year) Waseem</Copyright>
 		<RepositoryType>git</RepositoryType>
-
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
+		<RepositoryUrl>https://github.com/Was85/OpenApi.RequestExample</RepositoryUrl>
+		<PackageTags>api, swagger, scalar, redoc, openapi, example, nuget, aspnetcore</PackageTags>
 
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
