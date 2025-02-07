@@ -6,7 +6,7 @@
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageIcon>package-icon.png</PackageIcon>
-		<PackageId>AspnetCore.OpenApi.RequestExample.Extensions</PackageId>
+		<PackageId>OpenApi.RequestExample.Extensions</PackageId>
 		<ApplicationIcon></ApplicationIcon>
 		<Description>
 			This package provides a source generator for .NET Standard 2.0 applications,
