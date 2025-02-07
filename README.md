@@ -14,13 +14,13 @@
 Install the NuGet package via the .NET CLI:
 
 ```sh
-dotnet add package AspnetCore.OpenApi.RequestExample
+dotnet add package OpenApiRequestExample
 ```
 
 Or via the Package Manager Console:
 
 ```powershell
-Install-Package AspnetCore.OpenApi.RequestExample
+Install-Package OpenApiRequestExample
 ```
 
 ## Getting Started
