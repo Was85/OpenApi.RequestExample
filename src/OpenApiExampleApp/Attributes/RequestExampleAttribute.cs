@@ -21,8 +21,6 @@
             ExampleProviderProperty = exampleProviderProperty;
             Name = name;
         }
-
-
     }
 
 }
