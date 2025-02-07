@@ -9,8 +9,7 @@
         public Type ExampleProviderType { get; }
         public string ExampleProviderProperty { get; }
         public string Name { get; }
-
-
+        
         public RequestExampleAttribute(
             Type exampleProviderType,
             string exampleProviderProperty ="Example",
