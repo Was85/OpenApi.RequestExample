@@ -2,12 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
 
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageIcon>package-icon.png</PackageIcon>
 		<PackageId>OpenApiRequestExample</PackageId>
-		<ApplicationIcon></ApplicationIcon>
+		
 		<Description>
 			This package provides a source generator for .NET Standard 2.0 applications,
 			helping developers to automatically generate request examples for their APIs.
@@ -19,10 +21,10 @@
 		<Product></Product>
 		<Copyright>© Copyright $([System.DateTime]::Now.Year) Waseem</Copyright>
 		<RepositoryType>git</RepositoryType>
+		<RepositoryUrl>https://github.com/Was85/OpenApi.RequestExample</RepositoryUrl>
 
-		<TargetFramework>netstandard2.0</TargetFramework>
-		<LangVersion>latest</LangVersion>
-		<Nullable>enable</Nullable>
+		<PackageTags>api, swagger, scalar, redoc, openapi, example, nuget, aspnetcore</PackageTags>
+		
 
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -38,8 +40,8 @@
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\..\package-icon.png" Pack="true" PackagePath="" />
-		<None Include="..\..\README.md" Pack="true" PackagePath=""/>
-		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath=""/>
+		<None Include="..\..\README.md" Pack="true" PackagePath="" />
+		<None Include="..\..\LICENSE.txt" Pack="true" PackagePath="" />
 	</ItemGroup>
 </Project>
 
