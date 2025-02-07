@@ -89,25 +89,21 @@ jobs:
           name: nuget-package
 
 
+  publish:
+    name: Publish to NuGet
+    needs: [calculate_version, build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget-package
+
+      - name: Push to NuGet.org
+        run: |
+          dotnet nuget push *.nupkg \
+            --api-key ${{ secrets.NUGET_API_KEY }} \
+            --source https://api.nuget.org/v3/index.json
 
 
-  # Uncomment below section when ready to publish
-  # publish:
-  #   name: Publish to NuGet
-  #   needs: [calculate_version, build]
-  #   runs-on: ubuntu-latest
-  #   environment: 
-  #     name: nuget-publish
-  #     url: https://www.nuget.org/packages/
-  #   if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
-  #   steps:
-  #     - name: Download Artifact
-  #       uses: actions/download-artifact@v4
-  #       with:
-  #         name: nuget-package
-  # 
-  #     - name: Push to NuGet.org
-  #       run: |
-  #         dotnet nuget push *.nupkg \
-  #           --api-key ${{ secrets.NUGET_API_KEY }} \
-  #           --source https://api.nuget.org/v3/index.json
