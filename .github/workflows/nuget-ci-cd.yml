@@ -9,7 +9,6 @@ on:
   pull_request:
     branches:
       - main
-      - release/**
 
 env:
   MAJOR: 1
@@ -93,6 +92,9 @@ jobs:
     name: Publish to NuGet
     needs: [calculate_version, build]
     runs-on: ubuntu-latest
+    environment: 
+      name: Production
+      url: https://www.nuget.org/packages/
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/')
     steps:
       - name: Download Artifact
@@ -105,5 +107,3 @@ jobs:
           dotnet nuget push *.nupkg \
             --api-key ${{ secrets.NUGET_API_KEY }} \
             --source https://api.nuget.org/v3/index.json
-
-
