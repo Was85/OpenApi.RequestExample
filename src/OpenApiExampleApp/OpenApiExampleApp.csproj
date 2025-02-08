@@ -11,10 +11,9 @@
 		<PackageId>OpenApiRequestExample</PackageId>
 		
 		<Description>
-			This package provides a source generator for .NET Standard 2.0 applications,
+			This package provides a source generator for .NET9 applications,
 			helping developers to automatically generate request examples for their APIs.
-			It simplifies the process of creating and maintaining example requests,
-			ensuring consistency and reducing manual effort. Note: Minimal APIs are not supported.
+			It simplifies the process of creating and maintaining example requests. Note: Minimal APIs are not supported.
 		</Description>
 		<Authors>Waseem Al</Authors>
 		<Company></Company>
