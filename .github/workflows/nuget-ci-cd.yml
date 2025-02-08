@@ -13,7 +13,7 @@ on:
 env:
   MAJOR: 1
   MINOR: 0
-  PATCH: 1
+  PATCH: 2
   LABEL: preview
   SOLUTION_PATH: 'OpenApiExampleApp.sln'
 
@@ -27,18 +27,34 @@ jobs:
     steps:
       - name: Calculate Version
         id: version
+        shell: pwsh
         run: |
-          if [[ "$GITHUB_REF" == "refs/heads/main" ]]; then
-            FULL_VERSION="${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-${{ env.LABEL }}.$(date +%Y%m%d%H%M%S)"
-          elif [[ "$GITHUB_REF" =~ refs/heads/release/* ]]; then
-            FULL_VERSION="${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}"
-          else
-            FULL_VERSION="${{ env.MAJOR }}.${{ env.MINOR }}.${{ env.PATCH }}-local.$(date +%Y%m%d%H%M%S)"
-          fi
+          $major = "${{ env.MAJOR }}"
+          $minor = "${{ env.MINOR }}"
+          $patch = "${{ env.PATCH }}"
+          $label = "${{ env.LABEL }}"
+          $timestamp = (Get-Date -Format "yyyyMMddHHmmss")
+      
+          $branch = "${{ github.ref_name }}"
+          $fullVersion = ""
 
-          echo "version_prefix=$(echo $FULL_VERSION | cut -d'-' -f1)" >> $GITHUB_OUTPUT
-          echo "version_suffix=$(echo $FULL_VERSION | cut -d'-' -f2)" >> $GITHUB_OUTPUT
-          echo "Generated version: $FULL_VERSION"
+          if ($branch -eq "main") {
+              $fullVersion = "$major.$minor.$patch-$label.$timestamp"
+          }
+          elseif ($branch -like "release/*") {
+              $fullVersion = "$major.$minor.$patch"
+          }
+          else {
+              $fullVersion = "$major.$minor.$patch-local.$timestamp"
+          }
+
+          $versionParts = $fullVersion -split "-"
+          $versionPrefix = $versionParts[0]
+          $versionSuffix = if ($versionParts.Count -gt 1) { $versionParts[1] } else { "" }
+
+          Write-Output "version_prefix=$versionPrefix" >> $env:GITHUB_OUTPUT
+          Write-Output "version_suffix=$versionSuffix" >> $env:GITHUB_OUTPUT
+          Write-Output "Generated version: $fullVersion"
 
   build:
     name: Build and Package
