@@ -9,22 +9,6 @@ namespace DemoApi.Controllers;
 [Route("api/edge")]
 public class EdgeCaseController : ControllerBase
 {
-    // Edge Case: Missing Example Property
-    [HttpPost("missing-example")]
-    //[RequestExample(typeof(MissingExampleProvider))]
-    //public IActionResult AddMissingExample(WeatherForecastDto weatherForecastDto)
-    //{
-    //    return Created("Get", new { });
-    //}
-
-    //// Edge Case: Non-Static Example Property
-    //[HttpPost("non-static-example")]
-    //[RequestExample(typeof(NonStaticExampleProvider))]
-    //public IActionResult AddNonStaticExample(NonStaticExampleDto  nonStaticExampleDto)
-    //{
-    //    return Created("Get", new { });
-    //}
-
     // Duplicate Route Example
     [HttpPost("duplicate")]
     [RequestExample(typeof(BasicExamples), name: "DuplicateExample1")]
