@@ -115,11 +115,12 @@ namespace OpenApiExampleApp.SourceGenerators
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("using Microsoft.OpenApi.Models;");
+            sb.AppendLine("using Microsoft.OpenApi;");
             sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine("using Microsoft.AspNetCore.OpenApi;");
             sb.AppendLine("using System.Threading;");
             sb.AppendLine("using System.Threading.Tasks;");
+            sb.AppendLine("using System.Net.Http;");
 
             sb.AppendLine("public class GeneratedOpenApiDocumentTransformer : IOpenApiDocumentTransformer");
             sb.AppendLine("{");
@@ -150,17 +151,15 @@ namespace OpenApiExampleApp.SourceGenerators
                 sb.AppendLine($"        // Adding example(s) for {endpoint.Path} ({endpoint.OperationType})");
                 sb.AppendLine($"        if (document.Paths.ContainsKey(\"{endpoint.Path}\"))");
                 sb.AppendLine("        {");
-                sb.AppendLine($"            var operation = document.Paths[\"{endpoint.Path}\"].Operations[OperationType.{endpoint.OperationType}];");
+                sb.AppendLine($"            var operation = document.Paths[\"{endpoint.Path}\"].Operations[HttpMethod.{endpoint.OperationType}];");
                 sb.AppendLine($"            if (operation.RequestBody?.Content?.ContainsKey(\"application/json\") == true)");
                 sb.AppendLine("            {");
-                sb.AppendLine($"                if (operation.RequestBody.Content[\"application/json\"].Examples == null)");
-                sb.AppendLine("                {");
-                sb.AppendLine("                    operation.RequestBody.Content[\"application/json\"].Examples = new Dictionary<string, OpenApiExample>();");
-                sb.AppendLine("                }");
+                sb.AppendLine($"                var mediaType = operation.RequestBody.Content[\"application/json\"];");
+                sb.AppendLine("                var examples = mediaType.Examples;");
 
                 // Check if the ExampleProviderProperty is a dictionary of examples
                 sb.AppendLine($"                var exampleProvider = {endpoint.ExampleType}.{endpoint.ExampleProviderProperty};");
-                sb.AppendLine("                if (exampleProvider is IDictionary<string, OpenApiExample> exampleDict)");
+                sb.AppendLine("                if (exampleProvider is IDictionary<string, IOpenApiExample> exampleDict)");
                 sb.AppendLine("                {");
                 sb.AppendLine("                    foreach (var kvp in exampleDict)");
                 sb.AppendLine("                    {");
@@ -168,30 +167,38 @@ namespace OpenApiExampleApp.SourceGenerators
                 // Overwrite logic for multiple examples
                 if (endpoint.OverwriteExisting)
                 {
-                    sb.AppendLine("                        operation.RequestBody.Content[\"application/json\"].Examples[kvp.Key] = kvp.Value;");
+                    sb.AppendLine("                        if (examples.ContainsKey(kvp.Key))");
+                    sb.AppendLine("                        {");
+                    sb.AppendLine("                            examples.Remove(kvp.Key);");
+                    sb.AppendLine("                        }");
+                    sb.AppendLine("                        examples.Add(kvp.Key, kvp.Value);");
                 }
                 else
                 {
-                    sb.AppendLine("                        if (!operation.RequestBody.Content[\"application/json\"].Examples.ContainsKey(kvp.Key))");
+                    sb.AppendLine("                        if (!examples.ContainsKey(kvp.Key))");
                     sb.AppendLine("                        {");
-                    sb.AppendLine("                            operation.RequestBody.Content[\"application/json\"].Examples[kvp.Key] = kvp.Value;");
+                    sb.AppendLine("                            examples.Add(kvp.Key, kvp.Value);");
                     sb.AppendLine("                        }");
                 }
                 sb.AppendLine("                    }");
                 sb.AppendLine("                }");
-                sb.AppendLine("                else if (exampleProvider is OpenApiExample singleExample)");
+                sb.AppendLine("                else if (exampleProvider is IOpenApiExample singleExample)");
                 sb.AppendLine("                {");
 
                 // Overwrite logic for single example
                 if (endpoint.OverwriteExisting)
                 {
-                    sb.AppendLine($"                    operation.RequestBody.Content[\"application/json\"].Examples[\"{endpoint.ExampleName}\"] = singleExample;");
+                    sb.AppendLine($"                    if (examples.ContainsKey(\"{endpoint.ExampleName}\"))");
+                    sb.AppendLine("                    {");
+                    sb.AppendLine($"                        examples.Remove(\"{endpoint.ExampleName}\");");
+                    sb.AppendLine("                    }");
+                    sb.AppendLine($"                    examples.Add(\"{endpoint.ExampleName}\", singleExample);");
                 }
                 else
                 {
-                    sb.AppendLine($"                    if (!operation.RequestBody.Content[\"application/json\"].Examples.ContainsKey(\"{endpoint.ExampleName}\"))");
+                    sb.AppendLine($"                    if (!examples.ContainsKey(\"{endpoint.ExampleName}\"))");
                     sb.AppendLine("                    {");
-                    sb.AppendLine($"                        operation.RequestBody.Content[\"application/json\"].Examples[\"{endpoint.ExampleName}\"] = singleExample;");
+                    sb.AppendLine($"                        examples.Add(\"{endpoint.ExampleName}\", singleExample);");
                     sb.AppendLine("                    }");
                 }
                 sb.AppendLine("                }");

@@ -1,14 +1,17 @@
-﻿namespace DemoApi.RequestExamples;
+﻿using Microsoft.OpenApi;
+using System.Text.Json.Nodes;
+
+namespace DemoApi.RequestExamples;
 
 public static class NamedExamples
 {
-    public static Microsoft.OpenApi.Models.OpenApiExample Example => new Microsoft.OpenApi.Models.OpenApiExample
+    public static IOpenApiExample Example => new OpenApiExample
     {
         Summary = "Named Example",
-        Value = new Microsoft.OpenApi.Any.OpenApiObject
+        Value = new JsonObject
         {
-            ["Date"] = new Microsoft.OpenApi.Any.OpenApiString("2022-01-01"),
-            ["Summary"] = new Microsoft.OpenApi.Any.OpenApiString("Cloudy")
+            ["Date"] = "2022-01-01",
+            ["Summary"] = "Cloudy"
         }
     };
 }
