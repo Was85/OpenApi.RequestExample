@@ -115,8 +115,9 @@ namespace OpenApiExampleApp.SourceGenerators
         {
             var sb = new StringBuilder();
 
-            sb.AppendLine("using Microsoft.OpenApi.Models;");
+            sb.AppendLine("using Microsoft.OpenApi;");
             sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("using System.Net.Http;");
             sb.AppendLine("using Microsoft.AspNetCore.OpenApi;");
             sb.AppendLine("using System.Threading;");
             sb.AppendLine("using System.Threading.Tasks;");
@@ -150,17 +151,17 @@ namespace OpenApiExampleApp.SourceGenerators
                 sb.AppendLine($"        // Adding example(s) for {endpoint.Path} ({endpoint.OperationType})");
                 sb.AppendLine($"        if (document.Paths.ContainsKey(\"{endpoint.Path}\"))");
                 sb.AppendLine("        {");
-                sb.AppendLine($"            var operation = document.Paths[\"{endpoint.Path}\"].Operations[OperationType.{endpoint.OperationType}];");
+                sb.AppendLine($"            var operation = document.Paths[\"{endpoint.Path}\"].Operations[HttpMethod.{endpoint.OperationType}];");
                 sb.AppendLine($"            if (operation.RequestBody?.Content?.ContainsKey(\"application/json\") == true)");
                 sb.AppendLine("            {");
                 sb.AppendLine($"                if (operation.RequestBody.Content[\"application/json\"].Examples == null)");
                 sb.AppendLine("                {");
-                sb.AppendLine("                    operation.RequestBody.Content[\"application/json\"].Examples = new Dictionary<string, OpenApiExample>();");
+                sb.AppendLine("                    operation.RequestBody.Content[\"application/json\"].Examples = new Dictionary<string, IOpenApiExample>();");
                 sb.AppendLine("                }");
 
                 // Check if the ExampleProviderProperty is a dictionary of examples
                 sb.AppendLine($"                var exampleProvider = {endpoint.ExampleType}.{endpoint.ExampleProviderProperty};");
-                sb.AppendLine("                if (exampleProvider is IDictionary<string, OpenApiExample> exampleDict)");
+                sb.AppendLine("                if (exampleProvider is IDictionary<string, IOpenApiExample> exampleDict)");
                 sb.AppendLine("                {");
                 sb.AppendLine("                    foreach (var kvp in exampleDict)");
                 sb.AppendLine("                    {");
@@ -179,7 +180,7 @@ namespace OpenApiExampleApp.SourceGenerators
                 }
                 sb.AppendLine("                    }");
                 sb.AppendLine("                }");
-                sb.AppendLine("                else if (exampleProvider is OpenApiExample singleExample)");
+                sb.AppendLine("                else if (exampleProvider is IOpenApiExample singleExample)");
                 sb.AppendLine("                {");
 
                 // Overwrite logic for single example

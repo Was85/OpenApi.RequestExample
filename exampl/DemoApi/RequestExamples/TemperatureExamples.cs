@@ -1,14 +1,17 @@
-﻿namespace DemoApi.RequestExamples;
+﻿using System.Text.Json.Nodes;
+using Microsoft.OpenApi;
+
+namespace DemoApi.RequestExamples;
 
 public static class TemperatureExamples
 {
-    public static Microsoft.OpenApi.Models.OpenApiExample Example => new Microsoft.OpenApi.Models.OpenApiExample
+    public static IOpenApiExample Example => new OpenApiExample
     {
         Summary = "Temperature Example",
-        Value = new Microsoft.OpenApi.Any.OpenApiObject
+        Value = new JsonObject
         {
-            ["Celsius"] = new Microsoft.OpenApi.Any.OpenApiInteger(25),
-            ["Fahrenheit"] = new Microsoft.OpenApi.Any.OpenApiInteger(77)
+            ["Celsius"] = 25,
+            ["Fahrenheit"] = 77
         }
     };
 }

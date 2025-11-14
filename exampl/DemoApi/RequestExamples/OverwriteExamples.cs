@@ -1,16 +1,19 @@
-﻿namespace DemoApi.RequestExamples;
+﻿using System.Text.Json.Nodes;
+using Microsoft.OpenApi;
+
+namespace DemoApi.RequestExamples;
 
 // Example Providers
 
 public static class OverwriteExamples
 {
-    public static Microsoft.OpenApi.Models.OpenApiExample Example => new Microsoft.OpenApi.Models.OpenApiExample
+    public static IOpenApiExample Example => new OpenApiExample
     {
         Summary = "Overwrite Example",
-        Value = new Microsoft.OpenApi.Any.OpenApiObject
+        Value = new JsonObject
         {
-            ["Date"] = new Microsoft.OpenApi.Any.OpenApiString("2023-01-01"),
-            ["Summary"] = new Microsoft.OpenApi.Any.OpenApiString("Stormy")
+            ["Date"] = "2023-01-01",
+            ["Summary"] = "Stormy"
         }
     };
 }
