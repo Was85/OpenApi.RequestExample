@@ -1,25 +1,28 @@
-﻿namespace DemoApi.RequestExamples;
+﻿using Microsoft.OpenApi;
+using System.Text.Json.Nodes;
+
+namespace DemoApi.RequestExamples;
 
 public static class BasicExamples
 {
-    public static IDictionary<string, Microsoft.OpenApi.Models.OpenApiExample> Example => new Dictionary<string, Microsoft.OpenApi.Models.OpenApiExample>
+    public static IDictionary<string, IOpenApiExample> Example => new Dictionary<string, IOpenApiExample>
     {
-        ["SunnyExample"] = new Microsoft.OpenApi.Models.OpenApiExample
+        ["SunnyExample"] = new OpenApiExample
         {
             Summary = "Sunny Weather",
-            Value = new Microsoft.OpenApi.Any.OpenApiObject
+            Value = new JsonObject
             {
-                ["Date"] = new Microsoft.OpenApi.Any.OpenApiString("2021-07-01"),
-                ["Summary"] = new Microsoft.OpenApi.Any.OpenApiString("Sunny"),
+                ["Date"] = "2021-07-01",
+                ["Summary"] = "Sunny"
             }
         },
-        ["RainyExample"] = new Microsoft.OpenApi.Models.OpenApiExample
+        ["RainyExample"] = new OpenApiExample
         {
             Summary = "Rainy Weather",
-            Value = new Microsoft.OpenApi.Any.OpenApiObject
+            Value = new JsonObject
             {
-                ["Date"] = new Microsoft.OpenApi.Any.OpenApiString("2021-07-02"),
-                ["Summary"] = new Microsoft.OpenApi.Any.OpenApiString("Rainy"),
+                ["Date"] = "2021-07-02",
+                ["Summary"] = "Rainy"
             }
         }
     };
