@@ -66,19 +66,27 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
+
+      - name: Restore Solution
+        run: dotnet restore ${{ env.SOLUTION_PATH }}
 
       - name: Build Solution
         run: |
           dotnet build ${{ env.SOLUTION_PATH }} \
             --configuration Release \
+            --no-restore \
             -p:VersionPrefix=${{ needs.calculate_version.outputs.version_prefix }} \
             -p:VersionSuffix=${{ needs.calculate_version.outputs.version_suffix }}
+
+      - name: Run Tests
+        run: dotnet test ${{ env.SOLUTION_PATH }} --configuration Release --no-build --verbosity normal
 
       - name: Create NuGet Package
         run: |
           dotnet pack ${{ env.SOLUTION_PATH }} \
             --configuration Release \
+            --no-build \
             -p:VersionPrefix=${{ needs.calculate_version.outputs.version_prefix }} \
             -p:VersionSuffix=${{ needs.calculate_version.outputs.version_suffix }} \
             --output nupkgs \
