@@ -66,7 +66,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 9.0.x
+          dotnet-version: 10.0.x
 
       - name: Build Solution
         run: |
@@ -74,6 +74,21 @@ jobs:
             --configuration Release \
             -p:VersionPrefix=${{ needs.calculate_version.outputs.version_prefix }} \
             -p:VersionSuffix=${{ needs.calculate_version.outputs.version_suffix }}
+
+      - name: Run Tests
+        run: |
+          dotnet test ${{ env.SOLUTION_PATH }} \
+            --configuration Release \
+            --verbosity normal \
+            --logger "trx;LogFileName=test-results.trx"
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: '**/test-results.trx'
+          retention-days: 7
 
       - name: Create NuGet Package
         run: |
