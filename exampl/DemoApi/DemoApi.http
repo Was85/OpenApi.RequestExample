@@ -1,6 +1,47 @@
 @DemoApi_HostAddress = http://localhost:5287
 
-GET {{DemoApi_HostAddress}}/weatherforecast/
+# Basic Controller Examples
+POST {{DemoApi_HostAddress}}/Basic
 Accept: application/json
+Content-Type: application/json
+
+{
+  "date": "2024-01-01",
+  "temperatureC": 20,
+  "summary": "Sunny"
+}
+
+###
+
+GET {{DemoApi_HostAddress}}/Basic/get-item
+Accept: application/json
+
+###
+
+# Advanced Controller Examples
+PUT {{DemoApi_HostAddress}}/api/advanced
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Sample Item"
+}
+
+###
+
+DELETE {{DemoApi_HostAddress}}/api/advanced/1
+Accept: application/json
+
+###
+
+PATCH {{DemoApi_HostAddress}}/api/advanced/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "id": 1,
+  "name": "Updated Name"
+}
 
 ###
